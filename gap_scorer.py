@@ -123,7 +123,7 @@ def read_annotations(filename, is_gold):
   fieldnames = GOLD_FIELDNAMES if is_gold else SYSTEM_FIELDNAMES
 
   annotations = defaultdict(Annotation)
-  with open(filename, 'rU') as f:
+  with open(filename, 'r') as f:
     reader = csv.DictReader(f, fieldnames=fieldnames, delimiter='\t')
 
     # Skip the header line in the gold data
@@ -157,15 +157,17 @@ def calculate_scores(gold_annotations, system_annotations):
       denote no specific gender, i.e. overall scores.
   """
   scores = {}
-  for example_id, gold_annotation in gold_annotations.iteritems():
+  for example_id, gold_annotation in gold_annotations.items():
     system_annotation = system_annotations[example_id]
 
     name_a_annotations = [
         gold_annotation.name_a_coref, system_annotation.name_a_coref
     ]
+
     name_b_annotations = [
         gold_annotation.name_b_coref, system_annotation.name_b_coref
     ]
+
     for gender in [None, gold_annotation.gender]:
       if gender not in scores:
         scores[gender] = Scores()
